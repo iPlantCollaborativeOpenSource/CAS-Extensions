@@ -24,7 +24,8 @@ import org.springframework.dao.support.DataAccessUtils;
  * person attributes from directory objects that are associated with a person.  For example, this class can be used
  * in conjunction with {@link LdapPersonAttributeDao} to obtain group memberships from an LDAP directory that does not
  * have the group memberships listed in the Person object.  The spring configuration would look something like this:
- * 
+ *
+ * <pre>
  * {@code 
  * <bean id="groupAttributeRepository" class="org.iplantc.persondir.support.AccumulatingPersonAttributeDao">
  *     <property name="innerDao">
@@ -46,6 +47,7 @@ import org.springframework.dao.support.DataAccessUtils;
  *     </property>
  * </bean>
  * }
+ * </pre>
  * 
  * @author Dennis Roberts
  */
@@ -77,7 +79,7 @@ public class AccumulatingPersonAttributeDao extends AbstractDefaultAttributePers
      */
     @Override
     public IPersonAttributes getPerson(String uid) {
-        LOG.trace("called for uid: {}", uid);
+        LOG.trace("getPerson called for uid: {}", uid);
         Validate.notNull(uid, "uid may not be null.");
         final Map<String, List<Object>> seed = toSeedMap(uid);
         final Set<IPersonAttributes> people = getPeopleWithMultivaluedAttributes(seed);
@@ -105,8 +107,9 @@ public class AccumulatingPersonAttributeDao extends AbstractDefaultAttributePers
      */
     @Override
     public Set<IPersonAttributes> getPeopleWithMultivaluedAttributes(Map<String, List<Object>> query) {
-        LOG.trace("called for query: {}", query);
+        LOG.trace("getPeopleWithMultivaluedAttributes called for query: {}", query);
         Set<IPersonAttributes> people = innerDao.getPeopleWithMultivaluedAttributes(query);
+        LOG.debug("innerDao.getPeopleWithMultivaluedAttributes returned {}", people);
         if (people.isEmpty()) {
             return people;
         }
