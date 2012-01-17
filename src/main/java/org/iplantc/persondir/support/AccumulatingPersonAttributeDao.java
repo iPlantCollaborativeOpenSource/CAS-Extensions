@@ -12,7 +12,6 @@ import org.jasig.services.persondir.IPersonAttributeDao;
 import org.jasig.services.persondir.IPersonAttributes;
 import org.jasig.services.persondir.support.AbstractDefaultAttributePersonAttributeDao;
 import org.jasig.services.persondir.support.NamedPersonImpl;
-import org.jasig.services.persondir.support.ldap.LdapPersonAttributeDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.support.DataAccessUtils;
@@ -22,14 +21,14 @@ import org.springframework.dao.support.DataAccessUtils;
  * a class that implements {@link IPersonAttributes}.  This class is designed to wrap other implementations of
  * IPersonAttributeDao and intercept calls to getPerson().  The primary purpose of this class is to obtain multi-valued
  * person attributes from directory objects that are associated with a person.  For example, this class can be used
- * in conjunction with {@link LdapPersonAttributeDao} to obtain group memberships from an LDAP directory that does not
- * have the group memberships listed in the Person object.  The spring configuration would look something like this:
+ * in conjunction with {@link LdapMultirecordAttributeDao} to obtain group memberships from an LDAP directory that does
+ * not have the group memberships listed in the Person object.  The spring configuration would look something like this:
  *
  * <pre>
  * {@code 
  * <bean id="groupAttributeRepository" class="org.iplantc.persondir.support.AccumulatingPersonAttributeDao">
  *     <property name="innerDao">
- *         <bean class="org.jasig.services.persondir.support.ldap.LdapPersonAttributeDao">
+ *         <bean class="org.iplantc.persondir.support.ldap.LdapMultirecordAttributeDao">
  *             <property name="contextSource" ref="contextSource" />
  *             <property name="requireAllQueryAttributes" value="true" />
  *             <property name="baseDN" value="ou=Groups,dc=iplantcollaborative,dc=org" />
