@@ -1,6 +1,7 @@
 package org.iplantc.persondir.support;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -10,7 +11,6 @@ import org.apache.commons.lang.Validate;
 import org.jasig.services.persondir.IPersonAttributeDao;
 import org.jasig.services.persondir.IPersonAttributes;
 import org.jasig.services.persondir.support.AbstractDefaultAttributePersonAttributeDao;
-import org.jasig.services.persondir.support.CaseInsensitiveNamedPersonImpl;
 import org.jasig.services.persondir.support.NamedPersonImpl;
 import org.jasig.services.persondir.support.ldap.LdapPersonAttributeDao;
 import org.slf4j.Logger;
@@ -127,37 +127,35 @@ public class AccumulatingPersonAttributeDao extends AbstractDefaultAttributePers
      * @return the cumulative IPersonAttribute instance.
      */
     private IPersonAttributes accumulateAttributes(Set<IPersonAttributes> people) {
-        IPersonAttributes result = null;
+        String name = people.isEmpty() ? null : people.iterator().next().getName();
+        Map<String, List<Object>> cumulativeAttributes = new HashMap<String, List<Object>>();
         for (IPersonAttributes person : people) {
-            if (result == null) {
-                result = new CaseInsensitiveNamedPersonImpl(person.getName(), person.getAttributes());
-            }
-            else {
-                appendAttributes(result, person);
-            }
+            appendAttributes(cumulativeAttributes, person.getAttributes());
         }
-        return result;
+        return new NamedPersonImpl(name, cumulativeAttributes);
     }
 
     /**
-     * Appends attribute values from a source IPersonAttributes instance onto the end of equivalently named attributes
-     * in a destination IPersonAttributes instance.
+     * Appends attribute values from a source attribute map onto the end of equivalently named attributes in a
+     * destination attribute map.
      * 
-     * @param dest the destination IPersonAttributes instance.
-     * @param source the source IPersonAttributes instance.
+     * @param dest the destination attribute map.
+     * @param source the source attribute map.
      */
-    private void appendAttributes(IPersonAttributes dest, IPersonAttributes source) {
-        for (Map.Entry<String, List<Object>> entry : source.getAttributes().entrySet()) {
+    private void appendAttributes(Map<String, List<Object>> dest, Map<String, List<Object>> source) {
+        for (Map.Entry<String, List<Object>> entry : source.entrySet()) {
             List<Object> sourceValue = entry.getValue();
             if (sourceValue != null) {
-                List<Object> destValue = dest.getAttributes().get(entry.getKey());
+                String key = entry.getKey();
+                List<Object> destValue = dest.get(key);
                 if (destValue == null) {
                     destValue = new ArrayList<Object>(entry.getValue());
-                    LOG.debug("new attribute: {} => {}", entry.getKey(), entry.getValue());
+                    dest.put(key, destValue);
+                    LOG.debug("new attribute: {} => {}", key, destValue);
                 }
                 else {
                     destValue.addAll(entry.getValue());
-                    LOG.debug("updated attribute: {} => {}", entry.getKey(), entry.getValue());
+                    LOG.debug("updated attribute: {} => {}", key, destValue);
                 }
             }
         }
