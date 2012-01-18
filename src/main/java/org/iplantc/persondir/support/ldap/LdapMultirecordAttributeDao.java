@@ -97,7 +97,7 @@ import org.springframework.util.Assert;
  * @version $Revision: 18262 $ $Date: 2009-07-06 10:22:21 -0700 (Mon, 06 Jul 2009) $
  * @since uPortal 2.5
  */
-public class LdapMultirecordAttributesDao extends AbstractQueryMultirecordAttributeDao<LogicalFilterWrapper> implements InitializingBean {
+public class LdapMultirecordAttributeDao extends AbstractQueryMultirecordAttributeDao<LogicalFilterWrapper> implements InitializingBean {
     private static final Pattern QUERY_PLACEHOLDER = Pattern.compile("\\{0\\}");
     private final static AttributesMapper MAPPER = new AttributesMapperImpl();
 
@@ -114,7 +114,7 @@ public class LdapMultirecordAttributesDao extends AbstractQueryMultirecordAttrib
     private QueryType queryType = QueryType.AND;
     
     
-    public LdapMultirecordAttributesDao() {
+    public LdapMultirecordAttributeDao() {
         this.searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
         this.searchControls.setReturningObjFlag(false);
     }
