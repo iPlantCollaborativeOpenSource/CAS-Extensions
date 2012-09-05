@@ -69,7 +69,7 @@ public class WildcardHostnameVerifier implements HostnameVerifier {
      * @throws SSLPeerUnverifiedException if the host name can't be determined.
      */
     private String getCertHost(X509Certificate cert) throws SSLPeerUnverifiedException {
-        String dn = cert.getSubjectDN().getName();
+        String dn = cert.getSubjectX500Principal().getName();
         String cn = null;
         if (dn != null) {
             Matcher matcher = CN_PATTERN.matcher(dn);
@@ -110,7 +110,7 @@ public class WildcardHostnameVerifier implements HostnameVerifier {
      */
     private Pattern hostNameToRegex(String hostname) {
         StringBuilder builder = new StringBuilder();
-        String[] components = hostname.split("\\*");
+        String[] components = hostname.split("\\*", -1);
         builder.append("\\Q").append(components[0]).append("\\E");
         for (int i = 1; i < components.length; i++) {
             builder.append("[^.]*").append("\\Q").append(components[i]).append("\\E");
