@@ -5,16 +5,48 @@
 
     <groupId>org.iplantc.core</groupId>
     <artifactId>cas-extensions</artifactId>
-    <version>dev-SNAPSHOT</version>
+    <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>Extensions for CAS</name>
-    <url>http://projects.iplantcollaborative.org</url>
+    <url>https://github.com/iPlantCollaborativeOpenSource/CAS-Extensions</url>
+
+    <description>
+        Classes to allow a CAS server to pass group membership information to client applications.
+    </description>
+
+    <parent>
+        <groupId>org.sonatype.oss</groupId>
+        <artifactId>oss-parent</artifactId>
+        <version>7</version>
+    </parent>
+
+    <licenses>
+        <license>
+            <name>Standard BSD</name>
+            <url>http://www.iplantcollaborative.org/sites/default/files/iPLANT-LICENSE.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
 
     <properties>
         <jdk.version>1.6</jdk.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <scm.base>git@github.com:iPlantCollaborativeOpenSource</scm.base>
+        <scm.repo>CAS-Extensions.git</scm.repo>
     </properties>
+
+    <scm>
+        <connection>scm:git:${scm.base}/${scm.repo}</connection>
+        <developerConnection>scm:git:${scm.base}/${scm.repo}</developerConnection>
+        <url>${scm.base}/${scm.repo}</url>
+    </scm>
+
+    <developers>
+        <developer>
+            <url>https://github.com/orgs/iPlantCollaborativeOpenSource/teams/iplant-devs</url>
+        </developer>
+    </developers>
 
     <dependencies>
         <dependency>
